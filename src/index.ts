@@ -1,0 +1,140 @@
+#!/usr/bin/env node
+// Tegro Finance DEX MCP server (stdio). Gives an AI assistant a READ-ONLY view
+// of the Tegro Finance decentralized exchange on TON: pools, token market data,
+// swap quotes, and liquid-staking (stgTON) rates.
+//
+// Fully public and non-custodial: no API keys, no wallet, no signing, nothing
+// that moves funds. It only reads the public Tegro Finance API (via the
+// @tegroton/tegro-finance SDK). Nothing to configure — just run it.
+
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+import {
+  TegroFinanceClient,
+  TegroFinanceStakingClient,
+  toUnits,
+  applySlippage,
+  TON_NATIVE_ADDRESS,
+} from "@tegroton/tegro-finance";
+
+const dex = new TegroFinanceClient();
+const staking = new TegroFinanceStakingClient();
+
+const server = new McpServer({ name: "tegro-finance", version: "0.1.0" });
+
+type ToolResult = { content: { type: "text"; text: string }[]; isError?: boolean };
+
+async function run(fn: () => unknown | Promise<unknown>): Promise<ToolResult> {
+  try {
+    const out = await fn();
+    return { content: [{ type: "text", text: JSON.stringify(out, null, 2) }] };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return { content: [{ type: "text", text: `Error: ${msg}` }], isError: true };
+  }
+}
+
+server.registerTool(
+  "tegro_dex_pools",
+  {
+    title: "List Tegro Finance DEX pools",
+    description:
+      "All liquidity pools with reserves, fees, LP supply, USD TVL and APYs. The TON sentinel address is " +
+      TON_NATIVE_ADDRESS +
+      ".",
+    inputSchema: {},
+  },
+  async () => run(() => dex.getPools()),
+);
+
+server.registerTool(
+  "tegro_dex_pools_for_token",
+  {
+    title: "Pools for a token",
+    description: "Liquidity pools that contain the given token (by jetton master address).",
+    inputSchema: { tokenAddress: z.string().describe("Jetton master address (EQ…/UQ…)") },
+  },
+  async (a) => run(() => dex.getPoolsForToken(a.tokenAddress)),
+);
+
+server.registerTool(
+  "tegro_dex_assets",
+  {
+    title: "Tegro Finance token registry",
+    description: "The list of tradable tokens (symbol, decimals, contract address, flags).",
+    inputSchema: {},
+  },
+  async () => run(() => dex.getAssetList()),
+);
+
+server.registerTool(
+  "tegro_dex_token",
+  {
+    title: "Token market data",
+    description: "Price, holders, liquidity, market cap and trust score for one token.",
+    inputSchema: { address: z.string().describe("Jetton master address") },
+  },
+  async (a) => run(() => dex.getTokenData(a.address)),
+);
+
+server.registerTool(
+  "tegro_dex_quote_swap",
+  {
+    title: "Quote a swap (read-only)",
+    description:
+      "Simulate an exact-in swap: how much of the ask token you'd receive for a given amount of the offer token. No transaction is built or signed.",
+    inputSchema: {
+      offerAddress: z.string().describe(`Token you give (use ${TON_NATIVE_ADDRESS} for TON)`),
+      askAddress: z.string().describe("Token you want"),
+      amount: z.union([z.number(), z.string()]).describe("Human amount of the offer token, e.g. 1.5"),
+      decimals: z.number().int().min(0).max(30).optional().describe("Offer token decimals (default 9)"),
+      slippage: z.number().min(0).max(0.5).optional().describe("Slippage tolerance, e.g. 0.01 = 1% (default 0.01)"),
+    },
+  },
+  async (a) =>
+    run(async () => {
+      const decimals = a.decimals ?? 9;
+      const slippage = a.slippage ?? 0.01;
+      const units = toUnits(a.amount, decimals);
+      const sim = await dex.simulateSwap({
+        offerAddress: a.offerAddress,
+        askAddress: a.askAddress,
+        units,
+        slippageTolerance: slippage,
+      });
+      return {
+        ...sim,
+        min_ask_units_with_slippage: applySlippage(sim.ask_units, slippage).toString(),
+      };
+    }),
+);
+
+server.registerTool(
+  "tegro_staking_pools",
+  {
+    title: "Liquid staking pools",
+    description: "Tegro liquid-staking pools (stgTON and others): APY, min stake, active flag.",
+    inputSchema: {},
+  },
+  async () => run(() => staking.getPools()),
+);
+
+server.registerTool(
+  "tegro_staking_rate",
+  {
+    title: "Liquid staking rate",
+    description:
+      "Live rate for a staking pool — `price` is the stgTON→TON rate (1e9 fixed point) and only appreciates.",
+    inputSchema: {
+      masterAddress: z
+        .string()
+        .describe("Staking master, e.g. stgTON EQC-DUl20SfQFVH34cky8N76la1K0Uu5UWjel5IEn7mjIrfc"),
+    },
+  },
+  async (a) => run(() => staking.getPoolData(a.masterAddress)),
+);
+
+const transport = new StdioServerTransport();
+await server.connect(transport);
+console.error("tegro-finance DEX MCP server running (stdio)");

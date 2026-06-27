@@ -1,0 +1,56 @@
+{
+  "name": "@tegroton/tegro-finance-mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for the Tegro Finance DEX on TON — let an AI assistant read pools, token prices, swap quotes and liquid-staking (stgTON) rates. Read-only, no keys, no signing. Built on @tegroton/tegro-finance.",
+  "type": "module",
+  "bin": {
+    "tegro-finance-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "@tegroton/tegro-finance": "^0.4.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "tegro",
+    "tegro-finance",
+    "dex",
+    "ton",
+    "the-open-network",
+    "defi",
+    "swap",
+    "liquidity",
+    "staking",
+    "claude",
+    "cursor"
+  ],
+  "author": "TegroTON",
+  "license": "MIT",
+  "homepage": "https://github.com/TegroTON/tegro-finance-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TegroTON/tegro-finance-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TegroTON/tegro-finance-mcp/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

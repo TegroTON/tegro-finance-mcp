@@ -65,6 +65,10 @@ or signing a real swap happens in the user's own wallet and is intentionally
 - **Liquid staking** — [`ton-gram-staking-docs`](https://github.com/TegroTON/ton-gram-staking-docs) — stgTON docs, contracts & API
 - **App** — [tegro.finance](https://tegro.finance) · **Docs** — [docs.tegro.finance](https://docs.tegro.finance)
 
+## Other AI surfaces
+
+Same read-only API, every assistant — see [`integrations/`](integrations/): `llms.txt`, an agent guide, a curated OpenAPI, a ChatGPT custom-GPT recipe, and Hermes/function-calling tools. `llms.txt` is live at <https://tegro.finance/llms.txt>.
+
 ## Community
 
 Telegram [@tegrofinance](https://t.me/tegrofinance) · X [@TegroDEX](https://x.com/TegroDEX)

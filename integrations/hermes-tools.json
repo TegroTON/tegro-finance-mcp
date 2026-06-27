@@ -1,0 +1,79 @@
+{
+  "_about": "OpenAI function-calling tool definitions for the Tegro Finance DEX (read-only). Works with NousResearch Hermes (Hermes-Function-Calling format) and any OpenAI-compatible function-calling agent. `routing` maps each tool name to the HTTP call to make against `api_base`. For Claude/Cursor/MCP-capable agents, prefer the MCP server @tegroton/tegro-finance-mcp.",
+  "api_base": "https://api.tegro.finance",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "tegro_get_pools",
+        "description": "List all Tegro Finance DEX liquidity pools with reserves, fees, USD TVL and APYs.",
+        "parameters": { "type": "object", "properties": {}, "required": [] }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "tegro_get_assets",
+        "description": "List the tradable tokens on Tegro Finance (symbol, decimals, contract address).",
+        "parameters": { "type": "object", "properties": {}, "required": [] }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "tegro_get_token",
+        "description": "Market data for one token: price_usd, holders, liquidity_usd, mcap, trust_score.",
+        "parameters": {
+          "type": "object",
+          "properties": { "address": { "type": "string", "description": "Jetton master address (EQ…/UQ…)" } },
+          "required": ["address"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "tegro_simulate_swap",
+        "description": "Quote an exact-in swap: how much of ask_address you'd receive. Read-only; no transaction is built. Amounts are smallest units (amount × 10^decimals). TON sentinel address: EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "offer_address": { "type": "string", "description": "Token you give (TON = the sentinel address)" },
+            "ask_address": { "type": "string", "description": "Token you want" },
+            "units": { "type": "string", "description": "Amount of the offer token in smallest units" },
+            "slippage_tolerance": { "type": "number", "description": "e.g. 0.01 = 1%", "default": 0.01 }
+          },
+          "required": ["offer_address", "ask_address", "units"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "tegro_liquid_staking_pools",
+        "description": "List Tegro liquid-staking pools (stgTON and others): apy (percent), min stake, active flag.",
+        "parameters": { "type": "object", "properties": {}, "required": [] }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "tegro_liquid_staking_rate",
+        "description": "Live rate for a liquid-staking pool: price is the stgTON→TON rate in 1e9 fixed point (only appreciates).",
+        "parameters": {
+          "type": "object",
+          "properties": { "address": { "type": "string", "description": "Staking master, e.g. stgTON EQC-DUl20SfQFVH34cky8N76la1K0Uu5UWjel5IEn7mjIrfc" } },
+          "required": ["address"]
+        }
+      }
+    }
+  ],
+  "routing": {
+    "tegro_get_pools": { "method": "GET", "path": "/api/v1/pools" },
+    "tegro_get_assets": { "method": "GET", "path": "/api/v1/assets" },
+    "tegro_get_token": { "method": "GET", "path": "/api/v1/tokens/{address}/data" },
+    "tegro_simulate_swap": { "method": "POST", "path": "/api/v1/swap/simulate", "body": ["offer_address", "ask_address", "units", "slippage_tolerance"] },
+    "tegro_liquid_staking_pools": { "method": "GET", "path": "/api/v1/liquid-staking/pools" },
+    "tegro_liquid_staking_rate": { "method": "GET", "path": "/api/v1/liquid-staking/pool/{address}/data" }
+  }
+}

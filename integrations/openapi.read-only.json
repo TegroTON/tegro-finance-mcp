@@ -1,0 +1,2806 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Tegro Finance DEX — read-only API",
+    "version": "1.0.0",
+    "description": "Read-only slice of the Tegro Finance DEX API (TON): pools, tokens, swap quotes, liquid staking. No auth, no money movement."
+  },
+  "servers": [
+    {
+      "url": "https://api.tegro.finance"
+    }
+  ],
+  "paths": {
+    "/api/v1/swap/simulate": {
+      "post": {
+        "summary": "Simulate Swap Endpoint",
+        "operationId": "simulate_swap_endpoint_api_v1_swap_simulate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SwapSimulateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/SwapSimulateResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DexError"
+                    }
+                  ],
+                  "title": "Response Simulate Swap Endpoint Api V1 Swap Simulate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reverse_swap/simulate": {
+      "post": {
+        "summary": "Simulate Reverse Swap Endpoint",
+        "operationId": "simulate_reverse_swap_endpoint_api_v1_reverse_swap_simulate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SwapSimulateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/SwapSimulateResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DexError"
+                    }
+                  ],
+                  "title": "Response Simulate Reverse Swap Endpoint Api V1 Reverse Swap Simulate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pools": {
+      "get": {
+        "summary": "Get Pools Endpoint",
+        "operationId": "get_pools_endpoint_api_v1_pools_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Pool"
+                  },
+                  "type": "array",
+                  "title": "Response Get Pools Endpoint Api V1 Pools Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pools/{token_contract_address}": {
+      "get": {
+        "summary": "Get Pools For Token Endpoint",
+        "operationId": "get_pools_for_token_endpoint_api_v1_pools__token_contract_address__get",
+        "parameters": [
+          {
+            "name": "token_contract_address",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token Contract Address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pool"
+                  },
+                  "title": "Response Get Pools For Token Endpoint Api V1 Pools  Token Contract Address  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pools-pairs/for/{token_address}": {
+      "get": {
+        "summary": "Get Pools Pairs Endpoint",
+        "operationId": "get_pools_pairs_endpoint_api_v1_pools_pairs_for__token_address__get",
+        "parameters": [
+          {
+            "name": "token_address",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token Address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PoolPair"
+                  },
+                  "title": "Response Get Pools Pairs Endpoint Api V1 Pools Pairs For  Token Address  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pools-pairs": {
+      "get": {
+        "summary": "Get All Pools Pairs Endpoint",
+        "operationId": "get_all_pools_pairs_endpoint_api_v1_pools_pairs_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PoolPair"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Pools Pairs Endpoint Api V1 Pools Pairs Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assets": {
+      "get": {
+        "summary": "Get Assets Endpoint",
+        "operationId": "get_assets_endpoint_api_v1_assets_get",
+        "parameters": [
+          {
+            "name": "tegro-dex",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Tegro-Dex"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Body_get_assets_endpoint_api_v1_assets_get"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/AssetExport"
+                  },
+                  "title": "Response Get Assets Endpoint Api V1 Assets Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tokens/{address}/data": {
+      "get": {
+        "summary": "Get Token Data Endpoint",
+        "operationId": "get_token_data_endpoint_api_v1_tokens__address__data_get",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 80,
+              "title": "Address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/staking/info": {
+      "get": {
+        "summary": "Get Staking Info Endpoint",
+        "operationId": "get_staking_info_endpoint_api_v1_staking_info_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StakingPageData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/liquid-staking/pools": {
+      "get": {
+        "summary": "Get Staking Pools",
+        "operationId": "get_staking_pools_api_v1_liquid_staking_pools_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TonStakingPool"
+                  },
+                  "type": "array",
+                  "title": "Response Get Staking Pools Api V1 Liquid Staking Pools Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/liquid-staking/pool/{contract_address}/data": {
+      "get": {
+        "summary": "Get Stake Data",
+        "operationId": "get_stake_data_api_v1_liquid_staking_pool__contract_address__data_get",
+        "parameters": [
+          {
+            "name": "contract_address",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Contract Address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TonStakingPoolData"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountInfo": {
+        "properties": {
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "tgr_balance": {
+            "type": "integer",
+            "title": "Tgr Balance"
+          },
+          "nft_count": {
+            "type": "integer",
+            "title": "Nft Count"
+          },
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
+          },
+          "telegram_auth_payload": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Telegram Auth Payload"
+          },
+          "tg_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tg Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "tgr_balance",
+          "nft_count"
+        ],
+        "title": "AccountInfo"
+      },
+      "AccountStakingData": {
+        "properties": {
+          "positions": {
+            "items": {
+              "$ref": "#/components/schemas/StakePosition"
+            },
+            "type": "array",
+            "title": "Positions"
+          },
+          "withdraw_requests": {
+            "items": {
+              "$ref": "#/components/schemas/WithdrawRequestData"
+            },
+            "type": "array",
+            "title": "Withdraw Requests"
+          }
+        },
+        "type": "object",
+        "required": [
+          "positions",
+          "withdraw_requests"
+        ],
+        "title": "AccountStakingData"
+      },
+      "AdminCheckResponse": {
+        "properties": {
+          "is_admin": {
+            "type": "boolean",
+            "title": "Is Admin"
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "is_admin"
+        ],
+        "title": "AdminCheckResponse"
+      },
+      "AdminConfig": {
+        "properties": {
+          "bot": {
+            "$ref": "#/components/schemas/BotConfig"
+          },
+          "wallets": {
+            "items": {
+              "$ref": "#/components/schemas/WalletEntry"
+            },
+            "type": "array",
+            "title": "Wallets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bot",
+          "wallets"
+        ],
+        "title": "AdminConfig"
+      },
+      "AdminDexPool": {
+        "properties": {
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "token0_address": {
+            "type": "string",
+            "title": "Token0 Address"
+          },
+          "token1_address": {
+            "type": "string",
+            "title": "Token1 Address"
+          },
+          "token0_balance": {
+            "type": "number",
+            "title": "Token0 Balance"
+          },
+          "token1_balance": {
+            "type": "number",
+            "title": "Token1 Balance"
+          },
+          "deprecated": {
+            "type": "boolean",
+            "title": "Deprecated"
+          },
+          "apy_1d": {
+            "type": "number",
+            "title": "Apy 1D"
+          },
+          "apy_7d": {
+            "type": "number",
+            "title": "Apy 7D"
+          },
+          "lp_total_supply_usd": {
+            "type": "number",
+            "title": "Lp Total Supply Usd"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "token0_address",
+          "token1_address",
+          "token0_balance",
+          "token1_balance",
+          "deprecated",
+          "apy_1d",
+          "apy_7d",
+          "lp_total_supply_usd"
+        ],
+        "title": "AdminDexPool"
+      },
+      "AdminLiquidPool": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "contract_address": {
+            "type": "string",
+            "title": "Contract Address"
+          },
+          "in_asset_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "In Asset Address"
+          },
+          "in_asset_symbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "In Asset Symbol"
+          },
+          "contract_type": {
+            "type": "string",
+            "title": "Contract Type"
+          },
+          "apy": {
+            "type": "number",
+            "title": "Apy"
+          },
+          "min_offer_amount": {
+            "type": "number",
+            "title": "Min Offer Amount"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "contract_address",
+          "in_asset_address",
+          "contract_type",
+          "apy",
+          "min_offer_amount",
+          "is_active"
+        ],
+        "title": "AdminLiquidPool"
+      },
+      "AdminOverview": {
+        "properties": {
+          "liquid_pools_total": {
+            "type": "integer",
+            "title": "Liquid Pools Total"
+          },
+          "liquid_pools_active": {
+            "type": "integer",
+            "title": "Liquid Pools Active"
+          },
+          "fixed_staking_pools_total": {
+            "type": "integer",
+            "title": "Fixed Staking Pools Total"
+          },
+          "fixed_staking_pools_active": {
+            "type": "integer",
+            "title": "Fixed Staking Pools Active"
+          },
+          "dex_pools_total": {
+            "type": "integer",
+            "title": "Dex Pools Total"
+          },
+          "pending_withdraws": {
+            "type": "integer",
+            "title": "Pending Withdraws"
+          },
+          "processed_withdraws": {
+            "type": "integer",
+            "title": "Processed Withdraws"
+          }
+        },
+        "type": "object",
+        "required": [
+          "liquid_pools_total",
+          "liquid_pools_active",
+          "fixed_staking_pools_total",
+          "fixed_staking_pools_active",
+          "dex_pools_total",
+          "pending_withdraws",
+          "processed_withdraws"
+        ],
+        "title": "AdminOverview"
+      },
+      "AssetExport": {
+        "properties": {
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "decimals": {
+            "type": "integer",
+            "title": "Decimals"
+          },
+          "contract_address": {
+            "type": "string",
+            "title": "Contract Address"
+          },
+          "is_community": {
+            "type": "boolean",
+            "title": "Is Community",
+            "default": false
+          },
+          "is_deprecated": {
+            "type": "boolean",
+            "title": "Is Deprecated",
+            "default": false
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "symbol",
+          "decimals",
+          "contract_address"
+        ],
+        "title": "AssetExport"
+      },
+      "AuthWithTonProofRequest": {
+        "properties": {
+          "affiliate_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Affiliate Address"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "network": {
+            "type": "integer",
+            "title": "Network"
+          },
+          "proof": {
+            "$ref": "#/components/schemas/TonProof"
+          },
+          "tg_init_data": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tg Init Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "network",
+          "proof"
+        ],
+        "title": "AuthWithTonProofRequest"
+      },
+      "Body_get_assets_endpoint_api_v1_assets_get": {
+        "properties": {
+          "exclude_deprecated": {
+            "type": "boolean",
+            "title": "Exclude Deprecated",
+            "default": true
+          },
+          "exclude_community": {
+            "type": "boolean",
+            "title": "Exclude Community",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "Body_get_assets_endpoint_api_v1_assets_get"
+      },
+      "BotConfig": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "app_name": {
+            "type": "string",
+            "title": "App Name"
+          },
+          "mini_app_url": {
+            "type": "string",
+            "title": "Mini App Url"
+          },
+          "staking_url": {
+            "type": "string",
+            "title": "Staking Url"
+          },
+          "game_url": {
+            "type": "string",
+            "title": "Game Url"
+          },
+          "webhook_path": {
+            "type": "string",
+            "title": "Webhook Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "app_name",
+          "mini_app_url",
+          "staking_url",
+          "game_url",
+          "webhook_path"
+        ],
+        "title": "BotConfig"
+      },
+      "BroadcastRequest": {
+        "properties": {
+          "text_en": {
+            "type": "string",
+            "title": "Text En"
+          },
+          "text_ru": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Ru"
+          },
+          "text_ua": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Ua"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text_en"
+        ],
+        "title": "BroadcastRequest"
+      },
+      "BroadcastResponse": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "recipients": {
+            "type": "integer",
+            "title": "Recipients"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ok",
+          "recipients"
+        ],
+        "title": "BroadcastResponse"
+      },
+      "CompleteProvideLiquidityActivateRequest": {
+        "properties": {
+          "token0_amount": {
+            "type": "integer",
+            "title": "Token0 Amount"
+          },
+          "token1_amount": {
+            "type": "integer",
+            "title": "Token1 Amount"
+          },
+          "min_lp_out": {
+            "type": "integer",
+            "title": "Min Lp Out"
+          },
+          "lp_account_address": {
+            "type": "string",
+            "title": "Lp Account Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token0_amount",
+          "token1_amount",
+          "min_lp_out",
+          "lp_account_address"
+        ],
+        "title": "CompleteProvideLiquidityActivateRequest"
+      },
+      "CompleteProvideLiquidityRequest": {
+        "properties": {
+          "user_wallet_address": {
+            "type": "string",
+            "title": "User Wallet Address"
+          },
+          "token_address": {
+            "type": "string",
+            "title": "Token Address"
+          },
+          "second_token_address": {
+            "type": "string",
+            "title": "Second Token Address"
+          },
+          "token_amount": {
+            "type": "integer",
+            "title": "Token Amount"
+          },
+          "min_lp_out": {
+            "type": "integer",
+            "title": "Min Lp Out"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_wallet_address",
+          "token_address",
+          "second_token_address",
+          "token_amount",
+          "min_lp_out"
+        ],
+        "title": "CompleteProvideLiquidityRequest"
+      },
+      "CreatePoolRequest": {
+        "properties": {
+          "token0_address": {
+            "type": "string",
+            "title": "Token0 Address"
+          },
+          "token1_address": {
+            "type": "string",
+            "title": "Token1 Address"
+          },
+          "token0_units": {
+            "type": "integer",
+            "title": "Token0 Units"
+          },
+          "token1_units": {
+            "type": "integer",
+            "title": "Token1 Units"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token0_address",
+          "token1_address",
+          "token0_units",
+          "token1_units"
+        ],
+        "title": "CreatePoolRequest"
+      },
+      "DexError": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "error",
+              "success"
+            ],
+            "title": "Type"
+          },
+          "code": {
+            "$ref": "#/components/schemas/ErrorCodes"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "code",
+          "message"
+        ],
+        "title": "DexError"
+      },
+      "ErrorCodes": {
+        "type": "integer",
+        "enum": [
+          21,
+          22,
+          23
+        ],
+        "title": "ErrorCodes"
+      },
+      "ErrorMessage": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "ErrorMessage"
+      },
+      "GetJettonsBalancesResponse": {
+        "properties": {
+          "balances": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Balances"
+          }
+        },
+        "type": "object",
+        "required": [
+          "balances"
+        ],
+        "title": "GetJettonsBalancesResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HarvestRequest": {
+        "properties": {
+          "account_address": {
+            "type": "string",
+            "title": "Account Address"
+          },
+          "position_id": {
+            "type": "integer",
+            "title": "Position Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "account_address",
+          "position_id"
+        ],
+        "title": "HarvestRequest"
+      },
+      "HarvestResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "title": "HarvestResponse"
+      },
+      "HotWalletStatus": {
+        "properties": {
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "ton_balance": {
+            "type": "string",
+            "title": "Ton Balance"
+          },
+          "jetton_balances": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Jetton Balances",
+            "default": []
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "ton_balance"
+        ],
+        "title": "HotWalletStatus"
+      },
+      "IdoFullData": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "decimals": {
+            "type": "integer",
+            "title": "Decimals"
+          },
+          "contract_address": {
+            "type": "string",
+            "title": "Contract Address"
+          },
+          "texts": {
+            "$ref": "#/components/schemas/IdoTexts"
+          },
+          "links": {
+            "$ref": "#/components/schemas/IdoLinks"
+          },
+          "status": {
+            "$ref": "#/components/schemas/IdoStatus"
+          },
+          "start_date": {
+            "type": "integer",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "integer",
+            "title": "End Date"
+          },
+          "price": {
+            "type": "integer",
+            "title": "Price"
+          },
+          "cap": {
+            "type": "integer",
+            "title": "Cap"
+          },
+          "total_supply": {
+            "type": "integer",
+            "title": "Total Supply"
+          },
+          "total_offered": {
+            "type": "integer",
+            "title": "Total Offered"
+          },
+          "total_sold": {
+            "type": "integer",
+            "title": "Total Sold"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "symbol",
+          "decimals",
+          "contract_address",
+          "texts",
+          "links",
+          "status",
+          "start_date",
+          "end_date",
+          "price",
+          "cap",
+          "total_supply",
+          "total_offered",
+          "total_sold"
+        ],
+        "title": "IdoFullData"
+      },
+      "IdoLinks": {
+        "properties": {
+          "x": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "X"
+          },
+          "telegram": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Telegram"
+          },
+          "discord": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discord"
+          },
+          "instagram": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instagram"
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website"
+          },
+          "chat": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chat"
+          },
+          "tg_bot": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tg Bot"
+          }
+        },
+        "type": "object",
+        "required": [
+          "x",
+          "telegram",
+          "discord",
+          "instagram",
+          "website",
+          "chat",
+          "tg_bot"
+        ],
+        "title": "IdoLinks"
+      },
+      "IdoPageData": {
+        "properties": {
+          "idos_list": {
+            "items": {
+              "$ref": "#/components/schemas/IdoShortData"
+            },
+            "type": "array",
+            "title": "Idos List"
+          },
+          "payment_address": {
+            "type": "string",
+            "title": "Payment Address"
+          },
+          "ido_price": {
+            "type": "integer",
+            "title": "Ido Price"
+          }
+        },
+        "type": "object",
+        "required": [
+          "idos_list",
+          "payment_address",
+          "ido_price"
+        ],
+        "title": "IdoPageData"
+      },
+      "IdoShortData": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "contract_address": {
+            "type": "string",
+            "title": "Contract Address"
+          },
+          "decimals": {
+            "type": "integer",
+            "title": "Decimals"
+          },
+          "status": {
+            "$ref": "#/components/schemas/IdoStatus"
+          },
+          "start_date": {
+            "type": "integer",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "integer",
+            "title": "End Date"
+          },
+          "total_supply": {
+            "type": "integer",
+            "title": "Total Supply"
+          },
+          "total_offered": {
+            "type": "integer",
+            "title": "Total Offered"
+          },
+          "total_sold": {
+            "type": "integer",
+            "title": "Total Sold"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "symbol",
+          "contract_address",
+          "decimals",
+          "status",
+          "start_date",
+          "end_date",
+          "total_supply",
+          "total_offered",
+          "total_sold"
+        ],
+        "title": "IdoShortData"
+      },
+      "IdoStatus": {
+        "type": "string",
+        "enum": [
+          "Upcoming",
+          "Active",
+          "Finished"
+        ],
+        "title": "IdoStatus"
+      },
+      "IdoTexts": {
+        "properties": {
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "product_description_short": {
+            "type": "string",
+            "title": "Product Description Short"
+          },
+          "product_description": {
+            "type": "string",
+            "title": "Product Description"
+          },
+          "milestones": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Milestones"
+          },
+          "business_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Business Model"
+          },
+          "achievements": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Achievements"
+          },
+          "partnership": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partnership"
+          },
+          "core_team": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Core Team"
+          },
+          "tokenomics": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tokenomics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "language",
+          "product_description_short",
+          "product_description",
+          "milestones",
+          "business_model",
+          "achievements",
+          "partnership",
+          "core_team",
+          "tokenomics"
+        ],
+        "title": "IdoTexts"
+      },
+      "MessageData": {
+        "properties": {
+          "to": {
+            "type": "string",
+            "title": "To"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          },
+          "payload": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payload"
+          }
+        },
+        "type": "object",
+        "required": [
+          "to",
+          "amount"
+        ],
+        "title": "MessageData"
+      },
+      "PayloadResponse": {
+        "properties": {
+          "payload": {
+            "type": "string",
+            "title": "Payload"
+          }
+        },
+        "type": "object",
+        "required": [
+          "payload"
+        ],
+        "title": "PayloadResponse"
+      },
+      "PendingWithdraw": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "account_address": {
+            "type": "string",
+            "title": "Account Address"
+          },
+          "asset_contract_address": {
+            "type": "string",
+            "title": "Asset Contract Address"
+          },
+          "initial_units": {
+            "type": "string",
+            "title": "Initial Units"
+          },
+          "total_rewards": {
+            "type": "string",
+            "title": "Total Rewards"
+          },
+          "is_processed": {
+            "type": "boolean",
+            "title": "Is Processed"
+          },
+          "created_at": {
+            "type": "integer",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "account_address",
+          "asset_contract_address",
+          "initial_units",
+          "total_rewards",
+          "is_processed",
+          "created_at"
+        ],
+        "title": "PendingWithdraw"
+      },
+      "Pool": {
+        "properties": {
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "apy_1d": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apy 1D"
+          },
+          "apy_30d": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apy 30D"
+          },
+          "apy_7d": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apy 7D"
+          },
+          "collected_token0_protocol_fee": {
+            "type": "number",
+            "title": "Collected Token0 Protocol Fee"
+          },
+          "collected_token1_protocol_fee": {
+            "type": "number",
+            "title": "Collected Token1 Protocol Fee"
+          },
+          "deprecated": {
+            "type": "boolean",
+            "title": "Deprecated"
+          },
+          "lp_account_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Account Address"
+          },
+          "lp_balance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Balance"
+          },
+          "lp_fee": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Fee"
+          },
+          "lp_price_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Price Usd"
+          },
+          "lp_total_supply": {
+            "type": "number",
+            "title": "Lp Total Supply"
+          },
+          "lp_total_supply_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Total Supply Usd"
+          },
+          "lp_wallet_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Wallet Address"
+          },
+          "protocol_fee": {
+            "type": "integer",
+            "title": "Protocol Fee"
+          },
+          "protocol_fee_address": {
+            "type": "string",
+            "title": "Protocol Fee Address"
+          },
+          "ref_fee": {
+            "type": "integer",
+            "title": "Ref Fee"
+          },
+          "reserve0": {
+            "type": "number",
+            "title": "Reserve0"
+          },
+          "reserve1": {
+            "type": "number",
+            "title": "Reserve1"
+          },
+          "router_address": {
+            "type": "string",
+            "title": "Router Address"
+          },
+          "token0_balance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token0 Balance"
+          },
+          "token1_balance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token1 Balance"
+          },
+          "token0_address": {
+            "type": "string",
+            "title": "Token0 Address"
+          },
+          "token1_address": {
+            "type": "string",
+            "title": "Token1 Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "collected_token0_protocol_fee",
+          "collected_token1_protocol_fee",
+          "deprecated",
+          "lp_total_supply",
+          "protocol_fee",
+          "protocol_fee_address",
+          "ref_fee",
+          "reserve0",
+          "reserve1",
+          "router_address",
+          "token0_address",
+          "token1_address"
+        ],
+        "title": "Pool"
+      },
+      "PoolPair": {
+        "properties": {
+          "token0_address": {
+            "type": "string",
+            "title": "Token0 Address"
+          },
+          "token1_address": {
+            "type": "string",
+            "title": "Token1 Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token0_address",
+          "token1_address"
+        ],
+        "title": "PoolPair"
+      },
+      "PrepareClaimTransactionRequest": {
+        "properties": {
+          "voucher_address": {
+            "type": "string",
+            "title": "Voucher Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "voucher_address"
+        ],
+        "title": "PrepareClaimTransactionRequest"
+      },
+      "PrepareStakeTransactionRequest": {
+        "properties": {
+          "offer_amount": {
+            "type": "integer",
+            "title": "Offer Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "offer_amount"
+        ],
+        "title": "PrepareStakeTransactionRequest"
+      },
+      "PrepareUnstakeTransactionRequest": {
+        "properties": {
+          "shares_amount": {
+            "type": "integer",
+            "title": "Shares Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "shares_amount"
+        ],
+        "title": "PrepareUnstakeTransactionRequest"
+      },
+      "ProvideLiquidityRequest": {
+        "properties": {
+          "user_wallet_address": {
+            "type": "string",
+            "title": "User Wallet Address"
+          },
+          "token0_address": {
+            "type": "string",
+            "title": "Token0 Address"
+          },
+          "token1_address": {
+            "type": "string",
+            "title": "Token1 Address"
+          },
+          "token0_amount": {
+            "type": "integer",
+            "title": "Token0 Amount"
+          },
+          "token1_amount": {
+            "type": "integer",
+            "title": "Token1 Amount"
+          },
+          "min_lp_out": {
+            "type": "integer",
+            "title": "Min Lp Out"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_wallet_address",
+          "token0_address",
+          "token1_address",
+          "token0_amount",
+          "token1_amount",
+          "min_lp_out"
+        ],
+        "title": "ProvideLiquidityRequest"
+      },
+      "Referral": {
+        "properties": {
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "volume": {
+            "type": "integer",
+            "title": "Volume"
+          },
+          "rewards": {
+            "type": "integer",
+            "title": "Rewards"
+          },
+          "joined": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Joined"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "volume",
+          "rewards",
+          "joined"
+        ],
+        "title": "Referral"
+      },
+      "ReferralsPageData": {
+        "properties": {
+          "referrals": {
+            "items": {
+              "$ref": "#/components/schemas/Referral"
+            },
+            "type": "array",
+            "title": "Referrals"
+          },
+          "total_volume": {
+            "type": "integer",
+            "title": "Total Volume"
+          },
+          "total_rewards": {
+            "type": "integer",
+            "title": "Total Rewards"
+          }
+        },
+        "type": "object",
+        "required": [
+          "referrals",
+          "total_volume",
+          "total_rewards"
+        ],
+        "title": "ReferralsPageData"
+      },
+      "RemoveLiquidityRequest": {
+        "properties": {
+          "user_wallet_address": {
+            "type": "string",
+            "title": "User Wallet Address"
+          },
+          "pool_address": {
+            "type": "string",
+            "title": "Pool Address"
+          },
+          "lp_units": {
+            "type": "integer",
+            "title": "Lp Units"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_wallet_address",
+          "pool_address",
+          "lp_units"
+        ],
+        "title": "RemoveLiquidityRequest"
+      },
+      "SetLocaleRequest": {
+        "properties": {
+          "locale": {
+            "type": "string",
+            "title": "Locale"
+          }
+        },
+        "type": "object",
+        "required": [
+          "locale"
+        ],
+        "title": "SetLocaleRequest"
+      },
+      "SimulateProvideLiquidityRequest": {
+        "properties": {
+          "last_updated": {
+            "type": "string",
+            "enum": [
+              "token0",
+              "token1"
+            ],
+            "title": "Last Updated"
+          },
+          "token0_address": {
+            "type": "string",
+            "title": "Token0 Address"
+          },
+          "token1_address": {
+            "type": "string",
+            "title": "Token1 Address"
+          },
+          "token0_amount": {
+            "type": "integer",
+            "title": "Token0 Amount"
+          },
+          "token1_amount": {
+            "type": "integer",
+            "title": "Token1 Amount"
+          },
+          "slippage_tolerance": {
+            "type": "number",
+            "title": "Slippage Tolerance"
+          },
+          "user_wallet_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Wallet Address"
+          },
+          "lp_account_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Account Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "last_updated",
+          "token0_address",
+          "token1_address",
+          "token0_amount",
+          "token1_amount",
+          "slippage_tolerance"
+        ],
+        "title": "SimulateProvideLiquidityRequest"
+      },
+      "SimulateProvideLiquidityResponse": {
+        "properties": {
+          "token0_amount": {
+            "type": "integer",
+            "title": "Token0 Amount"
+          },
+          "token1_amount": {
+            "type": "integer",
+            "title": "Token1 Amount"
+          },
+          "min_expected_tokens": {
+            "type": "integer",
+            "title": "Min Expected Tokens"
+          },
+          "expected_tokens": {
+            "type": "integer",
+            "title": "Expected Tokens"
+          },
+          "estimated_share_of_pool": {
+            "type": "number",
+            "title": "Estimated Share Of Pool"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "provide",
+              "provide_second",
+              "provide_additional_amount",
+              "direct_add_provide",
+              "create"
+            ],
+            "title": "Action"
+          },
+          "lp_account_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lp Account Address"
+          },
+          "send_token_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Send Token Address"
+          },
+          "send_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Send Amount"
+          },
+          "fee_min": {
+            "type": "integer",
+            "title": "Fee Min"
+          },
+          "fee_max": {
+            "type": "integer",
+            "title": "Fee Max"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token0_amount",
+          "token1_amount",
+          "min_expected_tokens",
+          "expected_tokens",
+          "estimated_share_of_pool",
+          "action",
+          "fee_min",
+          "fee_max"
+        ],
+        "title": "SimulateProvideLiquidityResponse"
+      },
+      "StakePoolExport": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "asset_contract_address": {
+            "type": "string",
+            "title": "Asset Contract Address"
+          },
+          "base_apy": {
+            "type": "number",
+            "title": "Base Apy"
+          },
+          "lock_duration": {
+            "type": "integer",
+            "title": "Lock Duration"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "early_closure_available": {
+            "type": "boolean",
+            "title": "Early Closure Available"
+          },
+          "early_fee_percent": {
+            "type": "number",
+            "title": "Early Fee Percent"
+          },
+          "per_nft_bonus_factor": {
+            "type": "number",
+            "title": "Per Nft Bonus Factor"
+          },
+          "max_nft_count": {
+            "type": "integer",
+            "title": "Max Nft Count"
+          },
+          "max_deposit_units": {
+            "type": "integer",
+            "title": "Max Deposit Units"
+          },
+          "min_deposit_units": {
+            "type": "integer",
+            "title": "Min Deposit Units"
+          },
+          "total_staked": {
+            "type": "integer",
+            "title": "Total Staked",
+            "default": 0
+          },
+          "all_time_staked": {
+            "type": "integer",
+            "title": "All Time Staked",
+            "default": 0
+          },
+          "total_active_positions": {
+            "type": "integer",
+            "title": "Total Active Positions",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "asset_contract_address",
+          "base_apy",
+          "lock_duration",
+          "is_active",
+          "early_closure_available",
+          "early_fee_percent",
+          "per_nft_bonus_factor",
+          "max_nft_count",
+          "max_deposit_units",
+          "min_deposit_units"
+        ],
+        "title": "StakePoolExport"
+      },
+      "StakePosition": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "pool_id": {
+            "type": "integer",
+            "title": "Pool Id"
+          },
+          "asset_contract_address": {
+            "type": "string",
+            "title": "Asset Contract Address"
+          },
+          "lock_duration": {
+            "type": "integer",
+            "title": "Lock Duration"
+          },
+          "base_apy": {
+            "type": "number",
+            "title": "Base Apy"
+          },
+          "initial_units": {
+            "type": "integer",
+            "title": "Initial Units"
+          },
+          "total_rewards": {
+            "type": "integer",
+            "title": "Total Rewards"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "started_at": {
+            "type": "integer",
+            "title": "Started At"
+          },
+          "lock_days_left": {
+            "type": "integer",
+            "title": "Lock Days Left"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "pool_id",
+          "asset_contract_address",
+          "lock_duration",
+          "base_apy",
+          "initial_units",
+          "total_rewards",
+          "status",
+          "started_at",
+          "lock_days_left"
+        ],
+        "title": "StakePosition"
+      },
+      "StakeRequest": {
+        "properties": {
+          "account_address": {
+            "type": "string",
+            "title": "Account Address"
+          },
+          "units": {
+            "type": "integer",
+            "title": "Units"
+          },
+          "asset_contract_address": {
+            "type": "string",
+            "title": "Asset Contract Address"
+          },
+          "duration": {
+            "type": "integer",
+            "title": "Duration"
+          }
+        },
+        "type": "object",
+        "required": [
+          "account_address",
+          "units",
+          "asset_contract_address",
+          "duration"
+        ],
+        "title": "StakeRequest"
+      },
+      "StakingPageData": {
+        "properties": {
+          "pools": {
+            "items": {
+              "$ref": "#/components/schemas/StakePoolExport"
+            },
+            "type": "array",
+            "title": "Pools"
+          },
+          "bonus_modifier": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bonus Modifier"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pools"
+        ],
+        "title": "StakingPageData"
+      },
+      "SwapRequest": {
+        "properties": {
+          "userWalletAddress": {
+            "type": "string",
+            "title": "Userwalletaddress"
+          },
+          "offerJettonAddress": {
+            "type": "string",
+            "title": "Offerjettonaddress"
+          },
+          "offerAmount": {
+            "type": "integer",
+            "title": "Offeramount"
+          },
+          "askJettonAddress": {
+            "type": "string",
+            "title": "Askjettonaddress"
+          },
+          "minAskAmount": {
+            "type": "integer",
+            "title": "Minaskamount"
+          },
+          "forwardGasAmount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forwardgasamount"
+          },
+          "queryId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queryid"
+          },
+          "referralAddress": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Referraladdress"
+          }
+        },
+        "type": "object",
+        "required": [
+          "userWalletAddress",
+          "offerJettonAddress",
+          "offerAmount",
+          "askJettonAddress",
+          "minAskAmount"
+        ],
+        "title": "SwapRequest"
+      },
+      "SwapSimulateRequest": {
+        "properties": {
+          "offer_address": {
+            "type": "string",
+            "title": "Offer Address"
+          },
+          "ask_address": {
+            "type": "string",
+            "title": "Ask Address"
+          },
+          "units": {
+            "type": "integer",
+            "title": "Units"
+          },
+          "slippage_tolerance": {
+            "type": "number",
+            "title": "Slippage Tolerance"
+          },
+          "referral_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Referral Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "offer_address",
+          "ask_address",
+          "units",
+          "slippage_tolerance"
+        ],
+        "title": "SwapSimulateRequest"
+      },
+      "SwapSimulateResponse": {
+        "properties": {
+          "ask_address": {
+            "type": "string",
+            "title": "Ask Address"
+          },
+          "ask_units": {
+            "type": "integer",
+            "title": "Ask Units"
+          },
+          "fee_address": {
+            "type": "string",
+            "title": "Fee Address"
+          },
+          "fee_percent": {
+            "type": "number",
+            "title": "Fee Percent"
+          },
+          "fee_units": {
+            "type": "integer",
+            "title": "Fee Units"
+          },
+          "min_ask_units": {
+            "type": "integer",
+            "title": "Min Ask Units"
+          },
+          "offer_address": {
+            "type": "string",
+            "title": "Offer Address"
+          },
+          "offer_units": {
+            "type": "integer",
+            "title": "Offer Units"
+          },
+          "pool_address": {
+            "type": "string",
+            "title": "Pool Address"
+          },
+          "price_impact": {
+            "type": "number",
+            "title": "Price Impact"
+          },
+          "router_address": {
+            "type": "string",
+            "title": "Router Address"
+          },
+          "slippage_tolerance": {
+            "type": "number",
+            "title": "Slippage Tolerance"
+          },
+          "swap_rate": {
+            "type": "number",
+            "title": "Swap Rate"
+          },
+          "fee_min": {
+            "type": "integer",
+            "title": "Fee Min"
+          },
+          "fee_max": {
+            "type": "integer",
+            "title": "Fee Max"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ask_address",
+          "ask_units",
+          "fee_address",
+          "fee_percent",
+          "fee_units",
+          "min_ask_units",
+          "offer_address",
+          "offer_units",
+          "pool_address",
+          "price_impact",
+          "router_address",
+          "slippage_tolerance",
+          "swap_rate",
+          "fee_min",
+          "fee_max"
+        ],
+        "title": "SwapSimulateResponse"
+      },
+      "TokenResponse": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          },
+          "telegram_payload": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Telegram Payload"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "TokenResponse"
+      },
+      "TonProof": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp"
+          },
+          "domain": {
+            "$ref": "#/components/schemas/TonProofDomain"
+          },
+          "signature": {
+            "type": "string",
+            "title": "Signature"
+          },
+          "payload": {
+            "type": "string",
+            "title": "Payload"
+          },
+          "state_init": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State Init"
+          },
+          "public_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Public Key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "timestamp",
+          "domain",
+          "signature",
+          "payload"
+        ],
+        "title": "TonProof"
+      },
+      "TonProofDomain": {
+        "properties": {
+          "length_bytes": {
+            "type": "integer",
+            "title": "Length Bytes"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "length_bytes",
+          "value"
+        ],
+        "title": "TonProofDomain"
+      },
+      "TonStakingPool": {
+        "properties": {
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "in_asset": {
+            "$ref": "#/components/schemas/AssetExport"
+          },
+          "out_asset": {
+            "$ref": "#/components/schemas/AssetExport"
+          },
+          "apy": {
+            "type": "number",
+            "title": "Apy"
+          },
+          "fees": {
+            "type": "number",
+            "title": "Fees"
+          },
+          "min_offer_amount": {
+            "type": "integer",
+            "title": "Min Offer Amount"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "in_asset",
+          "out_asset",
+          "apy",
+          "fees",
+          "min_offer_amount",
+          "is_active"
+        ],
+        "title": "TonStakingPool"
+      },
+      "TonStakingPoolData": {
+        "properties": {
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "price": {
+            "type": "integer",
+            "title": "Price"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address",
+          "price",
+          "is_active"
+        ],
+        "title": "TonStakingPoolData"
+      },
+      "TransactionData": {
+        "properties": {
+          "valid_until": {
+            "type": "integer",
+            "title": "Valid Until"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/MessageData"
+            },
+            "type": "array",
+            "title": "Messages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "valid_until",
+          "messages"
+        ],
+        "title": "TransactionData"
+      },
+      "UnlockPoolRequest": {
+        "properties": {
+          "token0_address": {
+            "type": "string",
+            "title": "Token0 Address"
+          },
+          "token1_address": {
+            "type": "string",
+            "title": "Token1 Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token0_address",
+          "token1_address"
+        ],
+        "title": "UnlockPoolRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WalletEntry": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "address"
+        ],
+        "title": "WalletEntry"
+      },
+      "WithdrawRequestData": {
+        "properties": {
+          "asset_contract_address": {
+            "type": "string",
+            "title": "Asset Contract Address"
+          },
+          "initial_units": {
+            "type": "integer",
+            "title": "Initial Units"
+          },
+          "total_rewards": {
+            "type": "integer",
+            "title": "Total Rewards"
+          },
+          "is_processed": {
+            "type": "boolean",
+            "title": "Is Processed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "asset_contract_address",
+          "initial_units",
+          "total_rewards",
+          "is_processed"
+        ],
+        "title": "WithdrawRequestData"
+      },
+      "WithdrawalItem": {
+        "properties": {
+          "voucher_address": {
+            "type": "string",
+            "title": "Voucher Address"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          },
+          "claim_after": {
+            "type": "integer",
+            "title": "Claim After"
+          },
+          "claimable": {
+            "type": "boolean",
+            "title": "Claimable"
+          }
+        },
+        "type": "object",
+        "required": [
+          "voucher_address",
+          "amount",
+          "claim_after",
+          "claimable"
+        ],
+        "title": "WithdrawalItem"
+      }
+    }
+  }
+}

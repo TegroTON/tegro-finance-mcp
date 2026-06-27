@@ -1,0 +1,42 @@
+# Tegro Finance
+
+> Tegro Finance is a decentralized exchange (DEX) and liquid-staking protocol on
+> The Open Network (TON). This file helps AI assistants and agents read its
+> public market data: pools, token prices, swap quotes, and stgTON staking
+> rates. Everything here is read-only — no keys, no signing, no funds move.
+
+The native coin of TON is **GRAM** (ticker GRAM; renamed from Toncoin/TON on
+2026-06-15, 1:1, no migration). The network is still called TON / The Open
+Network. "Funded from your TON wallet" refers to the network; amounts are GRAM.
+
+## API (read-only)
+
+- [Read-only OpenAPI](https://github.com/TegroTON/tegro-finance-mcp/blob/main/integrations/openapi.read-only.json): pools, assets, token data, swap simulation, liquid staking — base URL `https://api.tegro.finance`
+- [Full OpenAPI](https://api.tegro.finance/openapi.json): the complete API (includes write/auth endpoints — use a wallet for those)
+- [Agent guide](https://github.com/TegroTON/tegro-finance-mcp/blob/main/integrations/ai-agent-guide.md): endpoints, fields, examples, and the safe surface for AI agents
+
+Key read endpoints (GET unless noted):
+- `/api/v1/pools` — all liquidity pools (reserves, fees, TVL, APYs)
+- `/api/v1/assets` — tradable token registry
+- `/api/v1/tokens/{address}/data` — price, holders, liquidity, trust score
+- `/api/v1/swap/simulate` (POST) — quote an exact-in swap
+- `/api/v1/liquid-staking/pools` — liquid-staking pools + APY
+- `/api/v1/liquid-staking/pool/{address}/data` — live stgTON→TON rate
+
+## Tools
+
+- [MCP server](https://github.com/TegroTON/tegro-finance-mcp) (`@tegroton/tegro-finance-mcp`): drop-in for Claude, Cursor, ChatGPT and any MCP client — pools, prices, swap quotes, staking
+- [TypeScript SDK](https://github.com/TegroTON/tegro-finance-sdk) (`@tegroton/tegro-finance`): typed read/quote/build client + TON Connect adapter
+
+## Building transactions
+
+Swaps, liquidity and staking are **non-custodial**: the user's wallet signs.
+Use the SDK's build methods + TON Connect, or the full API. Reading and quoting
+(this file's scope) never needs a wallet.
+
+## Links
+
+- App: https://tegro.finance
+- Docs: https://docs.tegro.finance
+- Telegram: https://t.me/tegrofinance
+- X: https://x.com/TegroDEX

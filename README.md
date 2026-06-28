@@ -3,6 +3,7 @@
 ![Tegro Finance DEX MCP](assets/banner.png)
 
 [![npm](https://img.shields.io/npm/v/@tegroton/tegro-finance-mcp)](https://www.npmjs.com/package/@tegroton/tegro-finance-mcp)
+[![CI](https://github.com/TegroTON/tegro-finance-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/TegroTON/tegro-finance-mcp/actions/workflows/ci.yml)
 [![MCP](https://img.shields.io/badge/MCP-server-blue)](https://modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Telegram](https://img.shields.io/badge/Telegram-@tegrofinance-2AABEE?logo=telegram)](https://t.me/tegrofinance)

@@ -17,9 +17,12 @@ import {
   applySlippage,
   TON_NATIVE_ADDRESS,
 } from "@tegroton/tegro-finance";
+import { withUserAgent } from "./http.js";
 
-const dex = new TegroFinanceClient();
-const staking = new TegroFinanceStakingClient();
+// Identify every API call (Cloudflare-friendly — see http.ts).
+const fetchUA = withUserAgent();
+const dex = new TegroFinanceClient({ fetch: fetchUA });
+const staking = new TegroFinanceStakingClient({ fetch: fetchUA });
 
 const server = new McpServer({ name: "tegro-finance", version: "0.1.0" });
 

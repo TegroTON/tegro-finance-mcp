@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
-import { TegroFinanceClient, TegroFinanceStakingClient } from "@tegroton/tegro-finance";
+import { TegroFinanceClient, TegroFinanceStakingClient, TON_NATIVE_ADDRESS } from "@tegroton/tegro-finance";
 import { USER_AGENT, withUserAgent } from "../src/http.js";
+import { resolveDecimals } from "../src/index.js";
 
 function mockFetch(handler: (url: string, init: RequestInit) => { status?: number; body: unknown }) {
   return vi.fn(async (url: URL | RequestInfo, init?: RequestInit) => {
@@ -82,5 +83,34 @@ describe("SDK clients carry the User-Agent (the calls the MCP makes)", () => {
     await staking.getPools();
     expect(url).toBe("https://tegro.finance/api/v1/liquid-staking/pools");
     expect(ua).toBe(USER_AGENT);
+  });
+});
+
+describe("resolveDecimals (swap-quote scaling — the footgun)", () => {
+  const USDT = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs";
+  // Minimal client stub — only getAssets is used.
+  const client = (assets: Record<string, { decimals: number }>) =>
+    ({ getAssets: async () => assets }) as unknown as TegroFinanceClient;
+
+  it("uses an explicit value without touching the registry", async () => {
+    const c = { getAssets: vi.fn() } as unknown as TegroFinanceClient;
+    expect(await resolveDecimals(c, USDT, 6)).toBe(6);
+    expect((c.getAssets as ReturnType<typeof vi.fn>)).not.toHaveBeenCalled();
+  });
+
+  it("returns 9 for TON without a registry call", async () => {
+    const c = { getAssets: vi.fn() } as unknown as TegroFinanceClient;
+    expect(await resolveDecimals(c, TON_NATIVE_ADDRESS)).toBe(9);
+    expect((c.getAssets as ReturnType<typeof vi.fn>)).not.toHaveBeenCalled();
+  });
+
+  it("resolves a non-TON jetton's decimals from the registry (6, not 9)", async () => {
+    const c = client({ [USDT]: { decimals: 6 } });
+    expect(await resolveDecimals(c, USDT)).toBe(6);
+  });
+
+  it("throws a clear error for an unknown token instead of guessing", async () => {
+    const c = client({});
+    await expect(resolveDecimals(c, USDT)).rejects.toThrow(/decimals/i);
   });
 });

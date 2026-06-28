@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/TegroTON/tegro-finance-mcp/security/advisories/new
+    about: Report a vulnerability privately (do not open a public issue).
+  - name: Tegro Finance docs
+    url: https://docs.tegro.finance
+    about: API & protocol documentation.
+  - name: Telegram
+    url: https://t.me/tegrofinance
+    about: Community & support.

@@ -7,6 +7,7 @@
 // that moves funds. It only reads the public Tegro Finance API (via the
 // @tegroton/tegro-finance SDK). Nothing to configure — just run it.
 
+import { fileURLToPath } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -43,12 +44,17 @@ async function run(fn: () => unknown | Promise<unknown>): Promise<ToolResult> {
 /**
  * Decimals for the offer token — explicit wins; TON is 9; otherwise resolved
  * from the on-chain registry. A wrong default here silently mis-scales quotes
- * (e.g. a 6-decimal USDT), so we never guess for non-TON jettons.
+ * (e.g. a 6-decimal USDT), so we never guess for non-TON jettons. Exported and
+ * client-injected for testability.
  */
-async function resolveDecimals(offer: string, provided?: number): Promise<number> {
+export async function resolveDecimals(
+  client: Pick<TegroFinanceClient, "getAssets">,
+  offer: string,
+  provided?: number,
+): Promise<number> {
   if (provided !== undefined) return provided;
   if (offer === TON_NATIVE_ADDRESS) return 9;
-  const assets = await dex.getAssets();
+  const assets = await client.getAssets();
   const dec = assets[offer]?.decimals;
   if (typeof dec === "number") return dec;
   throw new Error(
@@ -126,7 +132,7 @@ server.registerTool(
   },
   async (a) =>
     run(async () => {
-      const decimals = await resolveDecimals(a.offerAddress, a.decimals);
+      const decimals = await resolveDecimals(dex, a.offerAddress, a.decimals);
       const slippage = a.slippage ?? 0.01;
       const units = toUnits(a.amount, decimals);
       if (units <= 0n) throw new Error("amount must be greater than 0");
@@ -169,6 +175,10 @@ server.registerTool(
   async (a) => run(() => staking.getPoolData(a.masterAddress)),
 );
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
-console.error("tegro-finance DEX MCP server running (stdio)");
+// Connect stdio only when run as the binary — importing this module (tests)
+// must not start a server.
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("tegro-finance DEX MCP server running (stdio)");
+}

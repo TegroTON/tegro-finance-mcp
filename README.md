@@ -3,6 +3,7 @@
 ![Tegro Finance DEX MCP](assets/banner.png)
 
 [![npm](https://img.shields.io/npm/v/@tegroton/tegro-finance-mcp)](https://www.npmjs.com/package/@tegroton/tegro-finance-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/@tegroton/tegro-finance-mcp)](https://www.npmjs.com/package/@tegroton/tegro-finance-mcp)
 [![CI](https://github.com/TegroTON/tegro-finance-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/TegroTON/tegro-finance-mcp/actions/workflows/ci.yml)
 [![MCP](https://img.shields.io/badge/MCP-server-blue)](https://modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -33,7 +34,12 @@ liquid‑staking (stgTON) rates** in plain language.
 
 ### Claude Desktop
 
-Add to `claude_desktop_config.json`:
+Requires [Node.js](https://nodejs.org) ≥ 18. No account, no keys, no config.
+
+### Claude Desktop
+
+Add to `claude_desktop_config.json` (macOS:
+`~/Library/Application Support/Claude/claude_desktop_config.json`):
 
 ```json
 {
@@ -46,11 +52,26 @@ Add to `claude_desktop_config.json`:
 }
 ```
 
-### Cursor / Windsurf / other MCP clients
+### Claude Code
 
-Same shape — `command: npx`, `args: ["-y", "@tegroton/tegro-finance-mcp"]`. No
-config needed. Then ask: *"What are the top Tegro Finance pools by TVL?"*,
-*"Quote 100 TON → USDT on Tegro"*, or *"What's the stgTON staking APY?"*
+```bash
+claude mcp add tegro-finance -- npx -y @tegroton/tegro-finance-mcp
+```
+
+### Cursor · Windsurf · VS Code (Cline) · any MCP client
+
+Same shape — `command: "npx"`, `args: ["-y", "@tegroton/tegro-finance-mcp"]`, no
+`env`. Cursor: **Settings → MCP → Add**. VS Code/Cline: add it to the MCP
+servers list. ChatGPT (Developer mode / MCP) and other MCP-capable agents take
+the same command.
+
+## What you can ask
+
+- *"What are the top Tegro Finance pools by TVL right now?"*
+- *"Quote 100 TON → USDT on Tegro and show the price impact."*
+- *"What's the current stgTON liquid-staking APY and rate?"*
+- *"Show price, holders and liquidity for token `<address>`."*
+- *"Which Tegro pools include `<token>`?"*
 
 ## How it works
 

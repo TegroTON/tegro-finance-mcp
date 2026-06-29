@@ -10,10 +10,11 @@
 [![Telegram](https://img.shields.io/badge/Telegram-@tegrofinance-2AABEE?logo=telegram)](https://t.me/tegrofinance)
 [![X](https://img.shields.io/badge/X-@TegroDEX-000000?logo=x)](https://x.com/TegroDEX)
 
-A [Model Context Protocol](https://modelcontextprotocol.io) server for the
-**[Tegro Finance](https://tegro.finance) DEX** on [TON](https://ton.org) — let an
-AI assistant (Claude, Cursor, …) read **pools, token prices, swap quotes and
-liquid‑staking (stgTON) rates** in plain language.
+**Tegro Finance MCP** — a TON DeFi / DEX [Model Context Protocol](https://modelcontextprotocol.io)
+server. It lets an AI assistant (Claude, Cursor, ChatGPT, …) read live
+**[Tegro Finance](https://tegro.finance) DEX** data on [TON](https://ton.org) —
+**pools, token prices, swap quotes and liquid‑staking (stgTON) rates** — in plain
+language. AI access to live Tegro TON DEX data, with no wallet permissions.
 
 > **Read‑only & non‑custodial.** No API keys, no wallet, no signing — nothing
 > that can move funds. It only reads the public Tegro Finance API. Just run it.
@@ -32,22 +33,24 @@ liquid‑staking (stgTON) rates** in plain language.
 
 ## Install
 
+Requires [Node.js](https://nodejs.org) ≥ 18. No account, no keys, no `env` — the
+whole command is just:
+
+```bash
+npx -y @tegroton/tegro-finance-mcp
+```
+
+Wire that into any MCP client:
+
 ### Claude Desktop
 
-Requires [Node.js](https://nodejs.org) ≥ 18. No account, no keys, no config.
-
-### Claude Desktop
-
-Add to `claude_desktop_config.json` (macOS:
+`claude_desktop_config.json` (macOS:
 `~/Library/Application Support/Claude/claude_desktop_config.json`):
 
 ```json
 {
   "mcpServers": {
-    "tegro-finance": {
-      "command": "npx",
-      "args": ["-y", "@tegroton/tegro-finance-mcp"]
-    }
+    "tegro-finance": { "command": "npx", "args": ["-y", "@tegroton/tegro-finance-mcp"] }
   }
 }
 ```
@@ -58,12 +61,24 @@ Add to `claude_desktop_config.json` (macOS:
 claude mcp add tegro-finance -- npx -y @tegroton/tegro-finance-mcp
 ```
 
-### Cursor · Windsurf · VS Code (Cline) · any MCP client
+### Cursor
 
-Same shape — `command: "npx"`, `args: ["-y", "@tegroton/tegro-finance-mcp"]`, no
-`env`. Cursor: **Settings → MCP → Add**. VS Code/Cline: add it to the MCP
-servers list. ChatGPT (Developer mode / MCP) and other MCP-capable agents take
-the same command.
+`.cursor/mcp.json` (project) or **Settings → MCP → Add**:
+
+```json
+{
+  "mcpServers": {
+    "tegro-finance": { "command": "npx", "args": ["-y", "@tegroton/tegro-finance-mcp"] }
+  }
+}
+```
+
+### Windsurf · VS Code (Cline) · ChatGPT · any MCP client
+
+Same entry — `command: "npx"`, `args: ["-y", "@tegroton/tegro-finance-mcp"]`, no
+`env`. Add it to the client's MCP-servers list (Windsurf: Cascade MCP config;
+VS Code: Cline → MCP Servers; ChatGPT: Developer mode / MCP). For a ChatGPT
+**custom GPT** instead, see [`integrations/chatgpt-gpt.md`](integrations/chatgpt-gpt.md).
 
 ## What you can ask
 

@@ -1,0 +1,6 @@
+# Smithery — one-click install (https://smithery.ai)
+startCommand:
+  type: stdio
+  configSchema: {}
+  commandFunction: |-
+    () => ({ command: 'npx', args: ['-y', '@tegroton/tegro-finance-mcp'] })
